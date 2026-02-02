@@ -1,17 +1,22 @@
-import React, { useRef, useState } from "react";
+import React, { use, useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidation } from "../utils/validation";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/fireBase";
+import { adduser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
 
+  const name = useRef();
   const email = useRef();
   const password = useRef();
+  const dispatch = useDispatch()
 
   const toggleSignUpForm = () => {
     setIsSignInForm(!isSignInForm);
@@ -36,8 +41,24 @@ const Login = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
-          console.log("User Sign Up Successful:", user);
-          // ...
+          updateProfile(user, {
+            displayName: name.current.value,
+            photoURL: "https://media.licdn.com/dms/image/v2/D4E03AQG-k-jdB2bhjA/profile-displayphoto-shrink_200_200/B4EZdO3EUcHIAY-/0/1749374748923?e=1771459200&v=beta&t=TaCl24dV1GN2wUSJPo5YCef8lvtPp_lbhuhTAGvwI88",
+          })
+            .then(() => {
+              const {uid, email, displayName} = auth.currentUser;
+              dispatch(adduser({
+                uid: uid,
+                email: email,
+                displayName: displayName,
+                photoURL: 
+                  "https://media.licdn.com/dms/image/v2/D4E03AQG-k-jdB2bhjA/profile-displayphoto-shrink_200_200/B4EZdO3EUcHIAY-/0/1749374748923?e=1771459200&v=beta&t=TaCl24dV1GN2wUSJPo5YCef8lvtPp_lbhuhTAGvwI88",
+              }))
+            })
+            .catch((error) => {
+              // An error occurred 
+              setErrorMsg(error.message);
+            });
         })
         .catch((error) => {
           const errorCode = error.code;
@@ -90,6 +111,7 @@ const Login = () => {
         </h1>
         {!isSignInForm && (
           <input
+            ref={name}
             type="text"
             placeholder="Full Name"
             className="p-4 my-4 w-full bg-gray-700"
