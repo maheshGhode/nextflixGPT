@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/fireBase";
 import { adduser, removeUser } from "../utils/userSlice";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { LOGO, USER_AVATAR } from "../utils/constant";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const Header = () => {
   };
 
    useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed, 
         const { uid, email, displayName, photoURL} = user;
@@ -44,12 +45,14 @@ const Header = () => {
         navigate("/")
       }
     });
+
+    return () => unsubscribe();
   }, []);
   return (
-    <div className="absolute w-full py-4 px-8 bg-gradient-to-b from-black z-10 flex justify-between">
+    <div className="w-full py-4 px-8 bg-gradient-to-b from-black z-10 flex justify-between">
       <img
         className="w-44"
-        src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
+        src={LOGO}
         title="Netflix Logo"
         alt="Nextflix Logo"
       />
@@ -58,7 +61,7 @@ const Header = () => {
           <img
             alt="user-profile"
             className="w-12 h-12 rounded-full"
-            src={user.photoURL}
+            src={USER_AVATAR}
           />
           <button className="text-white font-bold" onClick={signOutUser}>
             (Sign Out)

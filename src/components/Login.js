@@ -1,4 +1,4 @@
-import React, { use, useRef, useState } from "react";
+import  {  useRef, useState } from "react";
 import Header from "./Header";
 import { checkValidation } from "../utils/validation";
 import {
@@ -9,6 +9,7 @@ import {
 import { auth } from "../utils/fireBase";
 import { adduser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
+import { USER_AVATAR } from "../utils/constant";
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -43,7 +44,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: name.current.value,
-            photoURL: "https://media.licdn.com/dms/image/v2/D4E03AQG-k-jdB2bhjA/profile-displayphoto-shrink_200_200/B4EZdO3EUcHIAY-/0/1749374748923?e=1771459200&v=beta&t=TaCl24dV1GN2wUSJPo5YCef8lvtPp_lbhuhTAGvwI88",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               const {uid, email, displayName} = auth.currentUser;
