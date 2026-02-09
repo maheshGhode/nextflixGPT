@@ -9,7 +9,7 @@ import {
 import { auth } from "../utils/fireBase";
 import { adduser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
-import { USER_AVATAR } from "../utils/constant";
+import { BG_URL, USER_AVATAR } from "../utils/constant";
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -98,7 +98,7 @@ const Login = () => {
       <div className="absolute">
         <img
           alt="bg-image"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/fc164b4b-f085-44ee-bb7f-ec7df8539eff/d23a1608-7d90-4da1-93d6-bae2fe60a69b/IN-en-20230814-popsignuptwoweeks-perspective_alpha_website_large.jpg"
+          src={BG_URL}
         />
       </div>
 
